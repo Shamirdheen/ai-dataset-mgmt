@@ -11,9 +11,7 @@
 
     <!-- Query 1 -->
     <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Query 1 — Datasets with Creator
-        </div>
+        <div class="card-header bg-primary text-white">Query 1 — Datasets with Creator</div>
         <div class="card-body">
             <code class="d-block mb-3 text-muted">SELECT d.name, d.domain, d.format, u.name AS created_by FROM datasets d JOIN users u ON d.created_by = u.user_id</code>
             <table class="table table-bordered table-sm">
@@ -29,9 +27,7 @@
 
     <!-- Query 2 -->
     <div class="card mb-4">
-        <div class="card-header bg-success text-white">
-            Query 2 — Versions by Sample Count
-        </div>
+        <div class="card-header bg-success text-white">Query 2 — Versions by Sample Count</div>
         <div class="card-body">
             <code class="d-block mb-3 text-muted">SELECT d.name, dv.version_tag, dv.total_samples, dv.file_size_mb FROM dataset_versions dv JOIN datasets d ON dv.dataset_id = d.dataset_id ORDER BY total_samples DESC</code>
             <table class="table table-bordered table-sm">
@@ -47,9 +43,7 @@
 
     <!-- Query 3 -->
     <div class="card mb-4">
-        <div class="card-header bg-warning text-dark">
-            Query 3 — Annotations with Annotator
-        </div>
+        <div class="card-header bg-warning text-dark">Query 3 — Annotations with Annotator</div>
         <div class="card-body">
             <code class="d-block mb-3 text-muted">SELECT a.sample_id, a.label, a.status, u.name AS annotator FROM annotations a JOIN users u ON a.annotated_by = u.user_id</code>
             <table class="table table-bordered table-sm">
@@ -65,9 +59,7 @@
 
     <!-- Query 4 -->
     <div class="card mb-4">
-        <div class="card-header bg-info text-white">
-            Query 4 — Quality Scores per Version
-        </div>
+        <div class="card-header bg-info text-white">Query 4 — Quality Scores per Version</div>
         <div class="card-body">
             <code class="d-block mb-3 text-muted">SELECT d.name, dv.version_tag, dvs.overall_score, dvs.completeness_score, dvs.consistency_score FROM dataset_version_scores dvs JOIN dataset_versions dv ... ORDER BY overall_score DESC</code>
             <table class="table table-bordered table-sm">
@@ -83,33 +75,13 @@
 
     <!-- Query 5 -->
     <div class="card mb-4">
-        <div class="card-header bg-dark text-white">
-            Query 5 — Training Jobs with Model and Dataset
-        </div>
-        <div class="card-body">
-            <code class="d-block mb-3 text-muted">SELECT m.name, dv.version_tag, tj.status, tj.started_at, tj.finished_at FROM training_jobs tj JOIN models m ... JOIN dataset_versions dv ...</code>
-            <table class="table table-bordered table-sm">
-                <thead class="table-dark"><tr><th>Model</th><th>Version</th><th>Status</th><th>Started</th><th>Finished</th></tr></thead>
-                <tbody>
-                {% for row in q5 %}
-                <tr><td>{{ row.model }}</td><td>{{ row.version_tag }}</td><td>{{ row.status }}</td><td>{{ row.started_at }}</td><td>{{ row.finished_at }}</td></tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Query 6 -->
-    <div class="card mb-4">
-        <div class="card-header bg-danger text-white">
-            Query 6 — Score Issues by Severity
-        </div>
+        <div class="card-header bg-danger text-white">Query 5 — Score Issues by Severity</div>
         <div class="card-body">
             <code class="d-block mb-3 text-muted">SELECT d.name, dsi.issue_type, dsi.severity, dsi.issue_detail FROM dataset_score_issues dsi JOIN dataset_version_scores dvs ... ORDER BY severity DESC</code>
             <table class="table table-bordered table-sm">
                 <thead class="table-dark"><tr><th>Dataset</th><th>Issue Type</th><th>Severity</th><th>Detail</th></tr></thead>
                 <tbody>
-                {% for row in q6 %}
+                {% for row in q5 %}
                 <tr><td>{{ row.dataset }}</td><td>{{ row.issue_type }}</td><td>{{ row.severity }}</td><td>{{ row.issue_detail }}</td></tr>
                 {% endfor %}
                 </tbody>

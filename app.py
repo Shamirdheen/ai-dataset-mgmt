@@ -247,17 +247,7 @@ def queries():
     """)
     q4 = cur.fetchall()
 
-    # Query 5: Training jobs with model and dataset
-    cur.execute("""
-        SELECT m.name AS model, dv.version_tag, tj.status,
-               tj.started_at, tj.finished_at
-        FROM training_jobs tj
-        JOIN models m ON tj.model_id = m.model_id
-        JOIN dataset_versions dv ON tj.version_id = dv.version_id
-    """)
-    q5 = cur.fetchall()
-
-    # Query 6: Score issues with severity
+    # Query 5: Score issues with severity
     cur.execute("""
         SELECT d.name AS dataset, dsi.issue_type, dsi.severity, dsi.issue_detail
         FROM dataset_score_issues dsi
@@ -266,9 +256,9 @@ def queries():
         JOIN datasets d ON dv.dataset_id = d.dataset_id
         ORDER BY dsi.severity DESC
     """)
-    q6 = cur.fetchall()
+    q5 = cur.fetchall()
 
     cur.close(); conn.close()
-    return render_template("queries.html", q1=q1, q2=q2, q3=q3, q4=q4, q5=q5, q6=q6)
+    return render_template("queries.html", q1=q1, q2=q2, q3=q3, q4=q4, q5=q5)
 if __name__ == "__main__":
     app.run(debug=True)
