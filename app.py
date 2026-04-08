@@ -205,6 +205,70 @@ def init_db():
     cur.close()
     conn.close()
     return "Database initialized successfully!"
+# ---------- SHOWCASE QUERIES ----------
+@app.route("/queries")
+def queries():
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
+    # Query 1: Datasets with creator
+    cur.execute("""
+        SELECT d.name, d.domain, d.format, u.name AS created_by
+        FROM datasets d
+        JOIN users u ON d.created_by = u.user_id
+    """)
+    q1 = cur.fetchall()
+
+    # Query 2: Versions with sample count
+    cur.execute("""
+        SELECT d.name AS dataset, dv.version_tag, dv.total_samples, dv.file_size_mb
+        FROM dataset_versions dv
+        JOIN datasets d ON dv.dataset_id = d.dataset_id
+        ORDER BY dv.total_samples DESC
+    """)
+    q2 = cur.fetchall()
+
+    # Query 3: Annotations with annotator
+    cur.execute("""
+        SELECT a.sample_id, a.label, a.status, u.name AS annotator
+        FROM annotations a
+        JOIN users u ON a.annotated_by = u.user_id
+    """)
+    q3 = cur.fetchall()
+
+    # Query 4: Quality scores per version
+    cur.execute("""
+        SELECT d.name AS dataset, dv.version_tag, dvs.overall_score,
+               dvs.completeness_score, dvs.consistency_score
+        FROM dataset_version_scores dvs
+        JOIN dataset_versions dv ON dvs.version_id = dv.version_id
+        JOIN datasets d ON dv.dataset_id = d.dataset_id
+        ORDER BY dvs.overall_score DESC
+    """)
+    q4 = cur.fetchall()
+
+    # Query 5: Training jobs with model and dataset
+    cur.execute("""
+        SELECT m.name AS model, dv.version_tag, tj.status,
+               tj.started_at, tj.finished_at
+        FROM training_jobs tj
+        JOIN models m ON tj.model_id = m.model_id
+        JOIN dataset_versions dv ON tj.version_id = dv.version_id
+    """)
+    q5 = cur.fetchall()
+
+    # Query 6: Score issues with severity
+    cur.execute("""
+        SELECT d.name AS dataset, dsi.issue_type, dsi.severity, dsi.issue_detail
+        FROM dataset_score_issues dsi
+        JOIN dataset_version_scores dvs ON dsi.score_id = dvs.score_id
+        JOIN dataset_versions dv ON dvs.version_id = dv.version_id
+        JOIN datasets d ON dv.dataset_id = d.dataset_id
+        ORDER BY dsi.severity DESC
+    """)
+    q6 = cur.fetchall()
+
+    cur.close(); conn.close()
+    return render_template("queries.html", q1=q1, q2=q2, q3=q3, q4=q4, q5=q5, q6=q6)
 if __name__ == "__main__":
     app.run(debug=True)

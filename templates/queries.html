@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Showcase Queries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h1 class="mb-4">📊 Showcase Queries</h1>
+
+    <!-- Query 1 -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Query 1 — Datasets with Creator
+        </div>
+        <div class="card-body">
+            <code class="d-block mb-3 text-muted">SELECT d.name, d.domain, d.format, u.name AS created_by FROM datasets d JOIN users u ON d.created_by = u.user_id</code>
+            <table class="table table-bordered table-sm">
+                <thead class="table-dark"><tr><th>Name</th><th>Domain</th><th>Format</th><th>Created By</th></tr></thead>
+                <tbody>
+                {% for row in q1 %}
+                <tr><td>{{ row.name }}</td><td>{{ row.domain }}</td><td>{{ row.format }}</td><td>{{ row.created_by }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 2 -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            Query 2 — Versions by Sample Count
+        </div>
+        <div class="card-body">
+            <code class="d-block mb-3 text-muted">SELECT d.name, dv.version_tag, dv.total_samples, dv.file_size_mb FROM dataset_versions dv JOIN datasets d ON dv.dataset_id = d.dataset_id ORDER BY total_samples DESC</code>
+            <table class="table table-bordered table-sm">
+                <thead class="table-dark"><tr><th>Dataset</th><th>Version</th><th>Total Samples</th><th>Size (MB)</th></tr></thead>
+                <tbody>
+                {% for row in q2 %}
+                <tr><td>{{ row.dataset }}</td><td>{{ row.version_tag }}</td><td>{{ row.total_samples }}</td><td>{{ row.file_size_mb }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 3 -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            Query 3 — Annotations with Annotator
+        </div>
+        <div class="card-body">
+            <code class="d-block mb-3 text-muted">SELECT a.sample_id, a.label, a.status, u.name AS annotator FROM annotations a JOIN users u ON a.annotated_by = u.user_id</code>
+            <table class="table table-bordered table-sm">
+                <thead class="table-dark"><tr><th>Sample ID</th><th>Label</th><th>Status</th><th>Annotator</th></tr></thead>
+                <tbody>
+                {% for row in q3 %}
+                <tr><td>{{ row.sample_id }}</td><td>{{ row.label }}</td><td>{{ row.status }}</td><td>{{ row.annotator }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 4 -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            Query 4 — Quality Scores per Version
+        </div>
+        <div class="card-body">
+            <code class="d-block mb-3 text-muted">SELECT d.name, dv.version_tag, dvs.overall_score, dvs.completeness_score, dvs.consistency_score FROM dataset_version_scores dvs JOIN dataset_versions dv ... ORDER BY overall_score DESC</code>
+            <table class="table table-bordered table-sm">
+                <thead class="table-dark"><tr><th>Dataset</th><th>Version</th><th>Overall</th><th>Completeness</th><th>Consistency</th></tr></thead>
+                <tbody>
+                {% for row in q4 %}
+                <tr><td>{{ row.dataset }}</td><td>{{ row.version_tag }}</td><td>{{ row.overall_score }}</td><td>{{ row.completeness_score }}</td><td>{{ row.consistency_score }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 5 -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            Query 5 — Training Jobs with Model and Dataset
+        </div>
+        <div class="card-body">
+            <code class="d-block mb-3 text-muted">SELECT m.name, dv.version_tag, tj.status, tj.started_at, tj.finished_at FROM training_jobs tj JOIN models m ... JOIN dataset_versions dv ...</code>
+            <table class="table table-bordered table-sm">
+                <thead class="table-dark"><tr><th>Model</th><th>Version</th><th>Status</th><th>Started</th><th>Finished</th></tr></thead>
+                <tbody>
+                {% for row in q5 %}
+                <tr><td>{{ row.model }}</td><td>{{ row.version_tag }}</td><td>{{ row.status }}</td><td>{{ row.started_at }}</td><td>{{ row.finished_at }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Query 6 -->
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            Query 6 — Score Issues by Severity
+        </div>
+        <div class="card-body">
+            <code class="d-block mb-3 text-muted">SELECT d.name, dsi.issue_type, dsi.severity, dsi.issue_detail FROM dataset_score_issues dsi JOIN dataset_version_scores dvs ... ORDER BY severity DESC</code>
+            <table class="table table-bordered table-sm">
+                <thead class="table-dark"><tr><th>Dataset</th><th>Issue Type</th><th>Severity</th><th>Detail</th></tr></thead>
+                <tbody>
+                {% for row in q6 %}
+                <tr><td>{{ row.dataset }}</td><td>{{ row.issue_type }}</td><td>{{ row.severity }}</td><td>{{ row.issue_detail }}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="/" class="btn btn-secondary">← Back to Dashboard</a>
+</div>
+</body>
+</html>
