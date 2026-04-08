@@ -9,11 +9,8 @@ def get_db():
     database_url = os.getenv("DATABASE_URL")
     if not database_url:
         raise RuntimeError("DATABASE_URL environment variable is not set.")
-
-    # Render may provide postgres:// URLs; psycopg2 expects postgresql://.
     if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
-
     return psycopg2.connect(database_url)
 
 # ---------- DASHBOARD ----------
@@ -198,17 +195,16 @@ def scores():
     cur.close(); conn.close()
     return render_template("scores.html", scores=scores, issues=issues)
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
+# ---------- INIT DB ----------
 @app.route('/init-db')
 def init_db():
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
     cur.execute(open('schema.sql', 'r').read())
     conn.commit()
     cur.close()
     conn.close()
     return "Database initialized successfully!"
+
+if __name__ == "__main__":
+    app.run(debug=True)
