@@ -200,3 +200,15 @@ def scores():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+@app.route('/init-db')
+def init_db():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(open('schema.sql', 'r').read())
+    conn.commit()
+    cur.close()
+    conn.close()
+    return "Database initialized successfully!"
