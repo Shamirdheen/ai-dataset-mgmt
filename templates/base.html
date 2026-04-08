@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Dataset Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f8f9fa; }
+    .sidebar { min-height: 100vh; background: #1e1e2e; padding-top: 20px; }
+    .sidebar a { color: #cdd6f4; text-decoration: none; display: block; padding: 10px 20px; border-radius: 6px; margin: 2px 10px; }
+    .sidebar a:hover, .sidebar a.active { background: #313244; color: #cba6f7; }
+    .sidebar .brand { color: #cba6f7; font-size: 1.2rem; font-weight: 600; padding: 10px 20px 20px; }
+    .stat-card { border: none; border-radius: 12px; padding: 20px; color: white; }
+    .badge-score { font-size: 0.85rem; padding: 5px 10px; border-radius: 20px; }
+  </style>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 sidebar">
+      <div class="brand">🗄 Dataset MGR</div>
+      <a href="/" class="{% if request.path == '/' %}active{% endif %}">Dashboard</a>
+      <a href="/datasets" class="{% if '/datasets' in request.path %}active{% endif %}">Datasets</a>
+      <a href="/versions" class="{% if '/versions' in request.path %}active{% endif %}">Versions</a>
+      <a href="/annotations" class="{% if '/annotations' in request.path %}active{% endif %}">Annotations</a>
+      <a href="/users" class="{% if '/users' in request.path %}active{% endif %}">Users & Roles</a>
+      <a href="/scores" class="{% if '/scores' in request.path %}active{% endif %}">Quality Scores</a>
+    </div>
+    <div class="col-md-10 p-4">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

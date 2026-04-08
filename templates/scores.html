@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<h4 class="fw-bold mb-4">Quality Scores</h4>
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-header bg-white fw-bold">Version Scores</div>
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr><th>Dataset</th><th>Version</th><th>Overall</th><th>Completeness</th><th>Accuracy</th><th>Consistency</th><th>Duplicate Rate</th></tr>
+      </thead>
+      <tbody>
+        {% for s in scores %}
+        <tr>
+          <td>{{ s.dataset_name }}</td>
+          <td><span class="badge bg-secondary">{{ s.version_tag }}</span></td>
+          <td>
+            {% if s.overall_score >= 85 %}<span class="badge bg-success">{{ s.overall_score }}</span>
+            {% elif s.overall_score >= 60 %}<span class="badge bg-warning text-dark">{{ s.overall_score }}</span>
+            {% else %}<span class="badge bg-danger">{{ s.overall_score }}</span>{% endif %}
+          </td>
+          <td>{{ s.completeness_score }}</td>
+          <td>{{ s.accuracy_score }}</td>
+          <td>{{ s.consistency_score }}</td>
+          <td>{{ s.duplicate_rate }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white fw-bold">Quality Issues</div>
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr><th>Issue Type</th><th>Severity</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        {% for i in issues %}
+        <tr>
+          <td>{{ i.issue_type }}</td>
+          <td>
+            {% if i.severity == 'HIGH' %}<span class="badge bg-danger">HIGH</span>
+            {% elif i.severity == 'MEDIUM' %}<span class="badge bg-warning text-dark">MEDIUM</span>
+            {% else %}<span class="badge bg-success">LOW</span>{% endif %}
+          </td>
+          <td>{{ i.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

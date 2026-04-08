@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0">Dataset Versions</h4>
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">+ Add Version</button>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr><th>Dataset</th><th>Version</th><th>Samples</th><th>Size (MB)</th><th>Changelog</th><th>Created</th></tr>
+      </thead>
+      <tbody>
+        {% for v in versions %}
+        <tr>
+          <td>{{ v.dataset_name }}</td>
+          <td><span class="badge bg-secondary">{{ v.version_tag }}</span></td>
+          <td>{{ v.total_samples }}</td>
+          <td>{{ v.file_size_mb }}</td>
+          <td>{{ v.changelog }}</td>
+          <td>{{ v.created_at.strftime('%Y-%m-%d') if v.created_at else '-' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Add Version</h5></div>
+      <form method="POST" action="/versions/add">
+        <div class="modal-body">
+          <select name="dataset_id" class="form-select mb-2" required>
+            {% for d in datasets %}<option value="{{ d.dataset_id }}">{{ d.name }}</option>{% endfor %}
+          </select>
+          <input name="version_tag" class="form-control mb-2" placeholder="e.g. v1.2" required>
+          <textarea name="changelog" class="form-control mb-2" placeholder="What changed?"></textarea>
+          <input name="file_size_mb" type="number" class="form-control mb-2" placeholder="File size (MB)">
+          <input name="total_samples" type="number" class="form-control mb-2" placeholder="Total samples">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

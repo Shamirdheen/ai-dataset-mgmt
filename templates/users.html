@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0">Users & Roles</h4>
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">+ Add User</button>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr><th>Name</th><th>Email</th><th>Roles</th><th>Joined</th></tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.name }}</td>
+          <td>{{ u.email }}</td>
+          <td><span class="badge bg-purple" style="background:#7c3aed">{{ u.roles or 'No role' }}</span></td>
+          <td>{{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '-' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Add User</h5></div>
+      <form method="POST" action="/users/add">
+        <div class="modal-body">
+          <input name="name" class="form-control mb-2" placeholder="Full name" required>
+          <input name="email" class="form-control mb-2" placeholder="Email" required>
+          <select name="role_id" class="form-select mb-2" required>
+            {% for r in roles %}<option value="{{ r.role_id }}">{{ r.role_name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
