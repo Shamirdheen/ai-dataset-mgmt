@@ -238,13 +238,13 @@ def queries():
 
     # Query 4: Quality scores per version
     cur.execute("""
-        SELECT d.name AS dataset, dv.version_tag, dvs.overall_score,
-               dvs.completeness_score, dvs.consistency_score
-        FROM dataset_version_scores dvs
-        JOIN dataset_versions dv ON dvs.version_id = dv.version_id
-        JOIN datasets d ON dv.dataset_id = d.dataset_id
-        ORDER BY dvs.overall_score DESC
-    """)
+    SELECT d.name AS dataset, dv.version_tag, dvs.overall_score,
+           dvs.completeness, dvs.consistency
+    FROM dataset_version_scores dvs
+    JOIN dataset_versions dv ON dvs.version_id = dv.version_id
+    JOIN datasets d ON dv.dataset_id = d.dataset_id
+    ORDER BY dvs.overall_score DESC
+""")
     q4 = cur.fetchall()
 
     # Query 5: Score issues with severity
