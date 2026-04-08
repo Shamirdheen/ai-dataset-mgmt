@@ -249,13 +249,12 @@ def queries():
 
     # Query 5: Score issues with severity
     cur.execute("""
-        SELECT d.name AS dataset, dsi.issue_type, dsi.severity, dsi.issue_detail
-        FROM dataset_score_issues dsi
-        JOIN dataset_version_scores dvs ON dsi.score_id = dvs.score_id
-        JOIN dataset_versions dv ON dvs.version_id = dv.version_id
-        JOIN datasets d ON dv.dataset_id = d.dataset_id
-        ORDER BY dsi.severity DESC
-    """)
+    SELECT d.name AS dataset, dsi.issue_type, dsi.severity, dsi.description
+    FROM dataset_score_issues dsi
+    JOIN dataset_version_scores dvs ON dsi.score_id = dvs.score_id
+    JOIN dataset_versions dv ON dvs.version_id = dv.version_id
+    JOIN datasets d ON dv.dataset_id = d.dataset_id
+    ORDER BY dsi.severity DESC""")
     q5 = cur.fetchall()
 
     cur.close(); conn.close()

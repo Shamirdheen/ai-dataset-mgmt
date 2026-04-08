@@ -64,11 +64,10 @@
             <code class="d-block mb-3 text-muted">SELECT d.name, dv.version_tag, dvs.overall_score, dvs.completeness_score, dvs.consistency_score FROM dataset_version_scores dvs JOIN dataset_versions dv ... ORDER BY overall_score DESC</code>
             <table class="table table-bordered table-sm">
                 <thead class="table-dark"><tr><th>Dataset</th><th>Version</th><th>Overall</th><th>Completeness</th><th>Consistency</th></tr></thead>
-                <tbody>
-                {% for row in q4 %}
-                <tr><td>{{ row.dataset }}</td><td>{{ row.version_tag }}</td><td>{{ row.overall_score }}</td><td>{{ row.completeness_score }}</td><td>{{ row.consistency_score }}</td></tr>
-                {% endfor %}
-                </tbody>
+<tbody>
+{% for row in q4 %}
+<tr><td>{{ row.dataset }}</td><td>{{ row.version_tag }}</td><td>{{ row.overall_score }}</td><td>{{ row.completeness }}</td><td>{{ row.consistency }}</td></tr>
+{% endfor %}
             </table>
         </div>
     </div>
@@ -81,9 +80,9 @@
             <table class="table table-bordered table-sm">
                 <thead class="table-dark"><tr><th>Dataset</th><th>Issue Type</th><th>Severity</th><th>Detail</th></tr></thead>
                 <tbody>
-                {% for row in q5 %}
-                <tr><td>{{ row.dataset }}</td><td>{{ row.issue_type }}</td><td>{{ row.severity }}</td><td>{{ row.issue_detail }}</td></tr>
-                {% endfor %}
+                    {% for row in q5 %}
+                    <tr><td>{{ row.dataset }}</td><td>{{ row.issue_type }}</td><td>{{ row.severity }}</td><td>{{ row.description }}</td></tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
